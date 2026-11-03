@@ -1,0 +1,261 @@
+:root {
+  --fundo: #eef6ee;
+  --verde: #2e7d32;
+  --verde-claro: #c8e6c9;
+  --texto: #1f2d1f;
+  --lixeira: #9aa5a0;
+  --lixeira-borda: #5f6b66;
+  --papel: #fdf3c4;
+  --vidro: #b9e6f5;
+  --metal: #d3d6da;
+  --plastico: #ffd0c2;
+
+  /* painel de código */
+  --cod-fundo: #1e2a22;
+  --cod-texto: #e6efe6;
+  --dest-ativo: rgba(255, 213, 79, .30);
+  --dest-ok: rgba(102, 187, 106, .35);
+  --dest-erro: rgba(239, 83, 80, .40);
+  --dest-sec: rgba(100, 181, 246, .28);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--verde);
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+header h1 { margin: 0 0 .3rem; font-size: 2rem; }
+header p  { margin: 0; opacity: .9; }
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.regras, .painel, .codigo-painel {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+}
+.regras h2, .codigo-painel h2 { margin-top: 0; color: var(--verde); }
+.regras ul { padding-left: 1.2rem; line-height: 1.6; }
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-top: .8rem;
+}
+.legenda span {
+  padding: .3rem .7rem;
+  border-radius: 999px;
+  font-size: .9rem;
+  border: 1px solid rgba(0, 0, 0, .15);
+}
+
+/* ---------- Jogo + código lado a lado ---------- */
+.area-jogo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (min-width: 1000px) {
+  .area-jogo { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+#mensagem { font-weight: 600; min-height: 1.4em; }
+#mensagem.erro { color: #c62828; }
+#mensagem.ok   { color: var(--verde); }
+
+/* ---------- Lixeiras (design neutro, todas iguais) ---------- */
+.lixeiras {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 2rem 0 2.2rem;
+}
+
+.lixeira {
+  width: 80px;
+  height: 250px;
+  display: flex;
+  flex-direction: column-reverse; /* o primeiro item (base da pilha) fica embaixo */
+  gap: 4px;
+  padding: 8px 6px 10px;
+  background: linear-gradient(90deg, #b4beb9, var(--lixeira) 50%, #b4beb9);
+  border: 3px solid var(--lixeira-borda);
+  border-top: 6px solid var(--lixeira-borda);
+  border-radius: 6px 6px 18px 18px;
+  cursor: pointer;
+  position: relative;
+  transition: transform .15s, box-shadow .15s;
+}
+.lixeira:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, .2); }
+.lixeira.selecionada {
+  transform: translateY(-14px);
+  box-shadow: 0 0 0 4px #ffb300, 0 8px 14px rgba(0, 0, 0, .25);
+}
+.lixeira.completa::after {
+  content: "✔";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--verde);
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+.lixeira .numero {
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: .9rem;
+  color: #555;
+}
+
+.lixo {
+  flex: 0 0 auto;
+  height: 50px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, .25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+}
+.lixo.papel    { background: var(--papel); }
+.lixo.vidro    { background: var(--vidro); }
+.lixo.metal    { background: var(--metal); }
+.lixo.plastico { background: var(--plastico); }
+.lixo.topo     { box-shadow: 0 0 0 2px rgba(0, 0, 0, .25); }
+
+.botoes {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: .5rem;
+}
+button {
+  font-size: 1rem;
+  padding: .6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--verde);
+  color: #fff;
+  cursor: pointer;
+}
+button:hover:not(:disabled) { background: #1b5e20; }
+button:disabled { background: #a5b3a6; cursor: not-allowed; }
+
+/* ---------- Painel de código ---------- */
+.legenda-codigo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: .8rem;
+}
+.chip {
+  font-size: .78rem;
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  color: var(--cod-texto);
+  background: var(--cod-fundo);
+  border-left: 5px solid transparent;
+}
+.chip.ativo { border-color: #ffd54f; }
+.chip.ok    { border-color: #66bb6a; }
+.chip.erro  { border-color: #ef5350; }
+.chip.sec   { border-color: #64b5f6; }
+
+.explica {
+  min-height: 3.2em;
+  padding: .7rem .9rem;
+  margin-bottom: .8rem;
+  border-radius: 8px;
+  background: #f3f7f3;
+  border-left: 5px solid #bbb;
+  font-size: .95rem;
+  line-height: 1.4;
+}
+.explica.ativo { border-color: #ffd54f; background: #fff9e0; }
+.explica.ok    { border-color: #66bb6a; background: #eaf7ea; }
+.explica.erro  { border-color: #ef5350; background: #fdeaea; }
+
+.codigo {
+  position: relative;               /* necessário para centralizar a linha ativa */
+  background: var(--cod-fundo);
+  color: var(--cod-texto);
+  border-radius: 10px;
+  padding: .8rem 0;
+  height: 520px;
+  overflow: auto;
+  font-family: "Consolas", "Fira Code", "Courier New", monospace;
+  font-size: .82rem;
+  line-height: 1.55;
+}
+.linha {
+  white-space: pre;
+  padding: 0 1rem;
+  border-left: 4px solid transparent;
+  transition: background .15s;
+  min-height: 1.55em;
+}
+.linha.ativa.ativo { background: var(--dest-ativo); border-left-color: #ffd54f; }
+.linha.ativa.ok    { background: var(--dest-ok);    border-left-color: #66bb6a; }
+.linha.ativa.erro  { background: var(--dest-erro);  border-left-color: #ef5350; }
+.linha.secundaria  { background: var(--dest-sec);   border-left-color: #64b5f6; }
+
+.tk-kw  { color: #ff9d6c; }
+.tk-str { color: #a5d6a7; }
+.tk-com { color: #8aa08f; font-style: italic; }
+.tk-num { color: #90caf9; }
+
+.velocidade {
+  display: block;
+  margin-top: .8rem;
+  font-size: .9rem;
+}
+.velocidade select { padding: .25rem .4rem; border-radius: 6px; }
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: .9rem;
+  background: var(--verde-claro);
+}
+
+@media (max-width: 520px) {
+  .lixeira { width: 60px; height: 230px; }
+  .lixo { height: 46px; font-size: 1.4rem; }
+  .codigo { font-size: .72rem; height: 420px; }
+}

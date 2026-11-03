@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jogo da Reciclagem</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>♻️ Jogo da Reciclagem</h1>
+    <p>Separe o lixo: deixe cada tipo junto em uma única lixeira.</p>
+  </header>
+
+  <main>
+    <section class="regras">
+      <h2>Como jogar</h2>
+      <ul>
+        <li>Clique em uma lixeira para pegar o lixo do <strong>topo</strong>.</li>
+        <li>Clique em outra lixeira para colocá-lo lá.</li>
+        <li>Só é permitido empilhar o <strong>mesmo tipo</strong> de lixo (ou usar uma lixeira vazia).</li>
+        <li>Ao lado, o código mostra <strong>qual trecho está sendo executado</strong> a cada jogada.</li>
+      </ul>
+      <div class="legenda" id="legenda"></div>
+    </section>
+
+    <section class="area-jogo">
+      <!-- ========== JOGO ========== -->
+      <div class="painel">
+        <div class="status">
+          <span>Jogadas: <strong id="jogadas">0</strong></span>
+          <span id="mensagem" role="status"></span>
+        </div>
+
+        <div class="lixeiras" id="lixeiras"></div>
+
+        <div class="botoes">
+          <button id="btnDesfazer">↩ Desfazer</button>
+          <button id="btnReiniciar">🔄 Novo jogo</button>
+        </div>
+      </div>
+
+      <!-- ========== CÓDIGO EM EXECUÇÃO ========== -->
+      <aside class="codigo-painel">
+        <h2>💻 Código em execução</h2>
+
+        <div class="legenda-codigo">
+          <span class="chip ativo">executando</span>
+          <span class="chip ok">passou</span>
+          <span class="chip erro">regra violada</span>
+          <span class="chip sec">método chamado</span>
+        </div>
+
+        <div id="explica" class="explica">Clique em uma lixeira para ver o código sendo executado.</div>
+
+        <div class="codigo" id="codigo" aria-label="Código do jogo"></div>
+
+        <label class="velocidade">
+          Velocidade da explicação:
+          <select id="velocidade">
+            <option value="900">Lenta</option>
+            <option value="450" selected>Normal</option>
+            <option value="150">Rápida</option>
+          </select>
+        </label>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <p>Projeto acadêmico · lixeiras implementadas como <strong>pilhas (LIFO)</strong></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
